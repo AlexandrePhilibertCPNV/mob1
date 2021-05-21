@@ -1,12 +1,13 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import * as SecureStore from "expo-secure-store";
 
 import { TextInput } from "../components/TextInput";
 import { UserContext } from "../App";
 import fetch from "../utils/fetch";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface SignInScreenState {
   bases: Base[];
@@ -75,16 +76,28 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
   }
 
   async handleSignIn() {
-    const { initials, currentBaseId } = this.state.user;
+    const { initials, password } = this.state.user;
 
-    // TODO: Use shared preferences for Android
-    await AsyncStorage.setItem(
-      "user",
-      JSON.stringify({
-        currentBaseId,
-        initials,
-      })
-    );
+    const formData = new FormData();
+
+    formData.append("initials", initials);
+    formData.append("password", password);
+
+    const response = await fetch("/gettoken", {
+      method: "POST",
+      body: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (response.status === 200) {
+      await SecureStore.setItemAsync("token", response.data.token);
+
+      AsyncStorage.setItem("initials", initials);
+    } else {
+      // TODO: Display error message
+    }
   }
 
   render() {
@@ -106,6 +119,7 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
                 autoFocus={true}
                 onChangeText={this.setInitials}
                 maxLength={3}
+                defaultValue={userContext.initials}
               />
               <TextInput
                 style={styles.textinput}

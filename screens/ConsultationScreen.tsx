@@ -3,12 +3,11 @@ import { StyleSheet, Text, View } from "react-native";
 
 import EditScreenInfo from "../components/EditScreenInfo";
 
-export default function TabOneScreen() {
+export default function ConsultationScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
     </View>
   );
 }

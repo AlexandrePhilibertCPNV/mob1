@@ -7,22 +7,26 @@ import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
-import { View } from "react-native";
 
-import TabOneScreen from "../screens/TabOneScreen";
+import ConsultationScreen from "../screens/ConsultationScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types";
+import {
+  BottomTabParamList,
+  TabConsultationParamList,
+  TabTwoParamList,
+} from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default class BottomTabNavigator extends React.Component {
   render() {
     return (
-      <BottomTab.Navigator initialRouteName="TabOne">
+      <BottomTab.Navigator initialRouteName="TabConsultation">
         <BottomTab.Screen
-          name="TabOne"
-          component={TabOneNavigator}
+          name="TabConsultation"
+          component={TabConsultationNavigator}
           options={{
+            title: "Consultation",
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="ios-code" color={color} />
             ),
@@ -53,18 +57,18 @@ class TabBarIcon extends React.Component<TabBarIconProps> {
   }
 }
 
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const TabConsultationStack = createStackNavigator<TabConsultationParamList>();
 
-class TabOneNavigator extends React.Component {
+class TabConsultationNavigator extends React.Component {
   render() {
     return (
-      <TabOneStack.Navigator>
-        <TabOneStack.Screen
-          name="TabOneScreen"
-          component={TabOneScreen}
-          options={{ headerTitle: "Tab One Title" }}
+      <TabConsultationStack.Navigator>
+        <TabConsultationStack.Screen
+          name="ConsultationScreen"
+          component={ConsultationScreen}
+          options={{ headerTitle: "Consultation" }}
         />
-      </TabOneStack.Navigator>
+      </TabConsultationStack.Navigator>
     );
   }
 }

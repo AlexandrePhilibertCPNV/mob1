@@ -12,8 +12,7 @@ export default async <T = any>(
   path: string,
   customOptions: CustomOptions = { headers: {} }
 ): Promise<FetchResponse<T>> => {
-  const isFormData =
-    typeof window !== "undefined" && customOptions.body instanceof FormData;
+  const isFormData = customOptions.body instanceof FormData;
 
   const options: RequestInit = {
     method: "GET",
@@ -22,8 +21,6 @@ export default async <T = any>(
       "Content-Type": "application/json",
       ...customOptions.headers,
     },
-    credentials:
-      process.env.NODE_ENV === "development" ? "include" : "same-origin",
   };
 
   if (customOptions.body && !isFormData) {
@@ -37,21 +34,13 @@ export default async <T = any>(
     cleanPath = `http://10.0.2.2:8000/api/${cleanPath}`;
   }
 
-  console.log(cleanPath);
+  const response = await fetch(cleanPath, options);
 
-  try {
-    const response = await fetch(cleanPath, options);
+  const data = await response.json();
 
-    const data = await response.json();
-
-    return {
-      data,
-      status: response.status,
-      statusText: response.statusText,
-    };
-  } catch (err) {
-    console.error(err);
-
-    return err;
-  }
+  return {
+    data,
+    status: response.status,
+    statusText: response.statusText,
+  };
 };

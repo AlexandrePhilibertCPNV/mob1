@@ -1,33 +1,44 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import * as SecureStore from "expo-secure-store";
+
 import Colors from "./constants/Colors";
-
 import Navigation from "./navigation";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const UserContext = React.createContext({});
+interface UserContextValue {
+  initials?: string;
+}
+
+export const UserContext = React.createContext<UserContextValue | null>({});
 
 export default class App extends React.Component {
   state = {
-    user: {},
+    user: null,
+    isLoading: true,
   };
 
   async componentDidMount() {
-    const user = await AsyncStorage.getItem("user");
-
-    console.log(user);
+    const token = await SecureStore.getItemAsync("token");
+    const initials = await AsyncStorage.getItem("initials");
 
     this.setState({
-      user,
+      user: {
+        initials,
+        token,
+      },
+      isLoading: false,
     });
   }
 
   render() {
+    const { user, isLoading } = this.state;
+
     return (
-      <UserContext.Provider value={this.state.user}>
+      <UserContext.Provider value={user}>
         <SafeAreaProvider>
-          <Navigation />
+          {isLoading ? null : <Navigation />}
           <StatusBar backgroundColor={Colors.light.primary} />
         </SafeAreaProvider>
       </UserContext.Provider>
