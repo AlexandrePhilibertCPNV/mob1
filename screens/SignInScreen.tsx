@@ -1,13 +1,15 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { TextInput } from "../components/TextInput";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserContext } from "../App";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import fetch from "../utils/fetch";
 
 interface SignInScreenState {
+  bases: Base[];
   user: {
     initials: string;
     password: string;
@@ -17,6 +19,7 @@ interface SignInScreenState {
 
 export class SignInScreen extends React.Component<{}, SignInScreenState> {
   state = {
+    bases: [],
     user: {
       initials: "",
       password: "",
@@ -31,6 +34,17 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
     this.setPassword = this.setPassword.bind(this);
     this.setCurrentBase = this.setCurrentBase.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchBases();
+  }
+
+  async fetchBases() {
+    const response = await fetch<Base[]>("/bases");
+    const bases = response.data;
+
+    this.setState({ bases });
   }
 
   setInitials(initials: string) {
@@ -63,6 +77,7 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
   async handleSignIn() {
     const { initials, currentBaseId } = this.state.user;
 
+    // TODO: Use shared preferences for Android
     await AsyncStorage.setItem(
       "user",
       JSON.stringify({
@@ -73,6 +88,8 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
   }
 
   render() {
+    const { user, bases } = this.state;
+
     return (
       <UserContext.Consumer>
         {(userContext) => (
@@ -88,6 +105,7 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
                 autoCorrect={false}
                 autoFocus={true}
                 onChangeText={this.setInitials}
+                maxLength={3}
               />
               <TextInput
                 style={styles.textinput}
@@ -100,15 +118,13 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
             </View>
             <Picker
               style={styles.basePicker}
-              selectedValue={this.state.user.currentBaseId}
+              selectedValue={user.currentBaseId}
               onValueChange={this.setCurrentBase}
               mode="dialog"
             >
-              <Picker.Item label="La Vallée-de-Joux" value={0} />
-              <Picker.Item label="Payerne" value={1} />
-              <Picker.Item label="Saint-Loup" value={2} />
-              <Picker.Item label="Ste-Croix" value={3} />
-              <Picker.Item label="Yverdon" value={4} />
+              {bases.map((base: Base) => (
+                <Picker.Item key={base.id} label={base.name} value={base.id} />
+              ))}
             </Picker>
             <TouchableOpacity
               style={styles.loginButton}
