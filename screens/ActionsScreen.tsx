@@ -49,6 +49,11 @@ export default class ActionsScreen extends React.Component<
           Dans le rapport du {report.date} à {report.base}
         </Title>
         <ScrollView>
+          {details.length === 0 && (
+            <Text style={styles.empty}>
+              Vous n'avez réaliser aucune action dans ce rapport
+            </Text>
+          )}
           {details.map(({ id, action, day, at }) => (
             <List.Item
               key={id}
@@ -70,5 +75,8 @@ export default class ActionsScreen extends React.Component<
 const styles = StyleSheet.create({
   title: {
     marginHorizontal: 12,
+  },
+  empty: {
+    margin: 12,
   },
 });
