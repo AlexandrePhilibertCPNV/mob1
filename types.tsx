@@ -18,5 +18,5 @@ export type TabConsultationParamList = {
 };
 
 export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+  ReportScreen: undefined;
 };

@@ -5,11 +5,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Icon } from "react-native-elements";
 
 import ConsultationScreen from "../screens/ConsultationScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import ReportSreen from "../screens/ReportScreen";
 import {
   BottomTabParamList,
   TabConsultationParamList,
-  TabTwoParamList,
+  TabTwoParamList as ReportParamList,
 } from "../types";
 import { TouchableNativeFeedback } from "react-native";
 import { UserContext } from "../App";
@@ -83,18 +83,18 @@ class TabConsultationNavigator extends React.Component {
   }
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const ReportStack = createStackNavigator<ReportParamList>();
 
 class TabTwoNavigator extends React.Component {
   render() {
     return (
-      <TabTwoStack.Navigator>
-        <TabTwoStack.Screen
-          name="TabTwoScreen"
-          component={TabTwoScreen}
-          options={{ headerTitle: "Tab Two Title" }}
+      <ReportStack.Navigator>
+        <ReportStack.Screen
+          name="ReportScreen"
+          component={ReportSreen}
+          options={{ headerTitle: "Rapporter" }}
         />
-      </TabTwoStack.Navigator>
+      </ReportStack.Navigator>
     );
   }
 }
