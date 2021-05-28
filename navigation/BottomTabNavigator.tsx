@@ -2,7 +2,6 @@ import * as React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Icon } from "react-native-elements";
 
 import ConsultationScreen from "../screens/ConsultationScreen";
 import ReportSreen from "../screens/ReportScreen";
@@ -11,7 +10,6 @@ import {
   TabConsultationParamList,
   TabTwoParamList as ReportParamList,
 } from "../types";
-import { TouchableNativeFeedback } from "react-native";
 import { UserContext } from "../App";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
