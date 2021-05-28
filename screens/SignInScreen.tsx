@@ -3,11 +3,11 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { TextInput } from "../components/TextInput";
 import { UserContext } from "../App";
 import fetch from "../utils/fetch";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface SignInScreenState {
   bases: Base[];
@@ -39,6 +39,13 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
 
   componentDidMount() {
     this.fetchBases();
+
+    this.setState({
+      user: {
+        ...this.state.user,
+        initials: this.context.initials,
+      },
+    });
   }
 
   async fetchBases() {
@@ -119,7 +126,7 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
                 autoFocus={true}
                 onChangeText={this.setInitials}
                 maxLength={3}
-                defaultValue={userContext.initials}
+                defaultValue={userContext?.initials}
               />
               <TextInput
                 style={styles.textinput}
@@ -155,6 +162,8 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
     );
   }
 }
+
+SignInScreen.contextType = UserContext;
 
 const styles = StyleSheet.create({
   container: {

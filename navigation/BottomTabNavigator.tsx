@@ -1,12 +1,8 @@
-/**
- * Learn more about createBottomTabNavigator:
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
-
+import * as React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import * as React from "react";
+import { Icon } from "react-native-elements";
 
 import ConsultationScreen from "../screens/ConsultationScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
@@ -15,6 +11,8 @@ import {
   TabConsultationParamList,
   TabTwoParamList,
 } from "../types";
+import { TouchableNativeFeedback } from "react-native";
+import { UserContext } from "../App";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -28,7 +26,7 @@ export default class BottomTabNavigator extends React.Component {
           options={{
             title: "Consultation",
             tabBarIcon: ({ color }) => (
-              <TabBarIcon name="ios-code" color={color} />
+              <TabBarIcon name="reader" color={color} />
             ),
           }}
         />
@@ -60,13 +58,25 @@ class TabBarIcon extends React.Component<TabBarIconProps> {
 const TabConsultationStack = createStackNavigator<TabConsultationParamList>();
 
 class TabConsultationNavigator extends React.Component {
+  static contextType = UserContext;
+
   render() {
     return (
       <TabConsultationStack.Navigator>
         <TabConsultationStack.Screen
           name="ConsultationScreen"
           component={ConsultationScreen}
-          options={{ headerTitle: "Consultation" }}
+          options={{
+            headerTitle: "Consultation",
+            headerRight: () => (
+              <Ionicons
+                name="ellipsis-vertical-sharp"
+                size={16}
+                style={{ padding: 12 }}
+                onPress={() => {}}
+              />
+            ),
+          }}
         />
       </TabConsultationStack.Navigator>
     );
