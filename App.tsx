@@ -6,6 +6,7 @@ import * as SecureStore from "expo-secure-store";
 
 import Colors from "./constants/Colors";
 import Navigation from "./navigation";
+import { SplashScreen } from "./screens/SplashScreen";
 
 interface UserContextValue {
   initials?: string;
@@ -36,10 +37,14 @@ export default class App extends React.Component {
   render() {
     const { user, isLoading } = this.state;
 
+    if (isLoading) {
+      return <SplashScreen />;
+    }
+
     return (
       <UserContext.Provider value={user}>
         <SafeAreaProvider>
-          {isLoading ? null : <Navigation />}
+          <Navigation />
           <StatusBar backgroundColor={Colors.light.primary} />
         </SafeAreaProvider>
       </UserContext.Provider>
