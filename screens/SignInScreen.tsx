@@ -83,7 +83,7 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
   }
 
   async handleSignIn() {
-    const { initials, password } = this.state.user;
+    const { initials, password, currentBaseId } = this.state.user;
 
     const formData = new FormData();
 
@@ -101,7 +101,8 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
     if (response.status === 200) {
       await SecureStore.setItemAsync("token", response.data.token);
 
-      AsyncStorage.setItem("initials", initials);
+      await AsyncStorage.setItem("initials", initials);
+      await AsyncStorage.setItem("currentBaseId", currentBaseId.toString());
     } else {
       // TODO: Display error message
     }
