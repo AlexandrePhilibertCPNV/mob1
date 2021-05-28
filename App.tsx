@@ -24,11 +24,13 @@ export default class App extends React.Component {
   async componentDidMount() {
     const token = await SecureStore.getItemAsync("token");
     const initials = await AsyncStorage.getItem("initials");
+    const currentBaseId = await AsyncStorage.getItem("currentBaseId");
 
     this.setState({
       user: {
         initials,
         token,
+        currentBaseId,
       },
       isLoading: false,
     });
