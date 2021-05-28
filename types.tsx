@@ -15,6 +15,7 @@ export type BottomTabParamList = {
 
 export type TabConsultationParamList = {
   ConsultationScreen: undefined;
+  Actions: undefined;
 };
 
 export type TabTwoParamList = {

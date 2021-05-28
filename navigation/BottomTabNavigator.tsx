@@ -11,6 +11,7 @@ import {
   TabTwoParamList as ReportParamList,
 } from "../types";
 import { UserContext } from "../App";
+import ActionsScreen from "../screens/ActionsScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -76,6 +77,7 @@ class TabConsultationNavigator extends React.Component {
             ),
           }}
         />
+        <TabConsultationStack.Screen name="Actions" component={ActionsScreen} />
       </TabConsultationStack.Navigator>
     );
   }

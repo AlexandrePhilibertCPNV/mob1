@@ -91,14 +91,18 @@ export default class ConsultationScreen extends React.Component<
               <List.Item
                 key={report.id}
                 title={`Le ${report.date} à ${report.base}`}
-                onPress={() => {}}
+                onPress={() => {
+                  this.props.navigation.navigate("Actions", {
+                    report,
+                  });
+                }}
               />
             ))}
           {tab === "drug" &&
             reports.drug.map((report: DrugReport) => (
               <List.Item
                 key={report.id}
-                title={` Semaine ${report.week} à ${report.base}`}
+                title={`Semaine ${report.week} à ${report.base}`}
                 onPress={() => {}}
               />
             ))}
