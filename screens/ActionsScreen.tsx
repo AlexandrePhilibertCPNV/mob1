@@ -49,8 +49,9 @@ export default class ActionsScreen extends React.Component<
           Dans le rapport du {report.date} à {report.base}
         </Title>
         <ScrollView>
-          {details.map(({ action, day, at }) => (
+          {details.map(({ id, action, day, at }) => (
             <List.Item
+              key={id}
               title={action}
               description={at}
               left={() => (
