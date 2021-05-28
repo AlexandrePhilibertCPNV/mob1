@@ -5,6 +5,7 @@ import { Chip, List } from "react-native-paper";
 import { ShiftReport } from "../types/shiftReport";
 import { DrugReport } from "../types/drugReport";
 import fetch from "../utils/fetch";
+import { NavigationProp } from "@react-navigation/core";
 
 interface ConsultationScreenState {
   reports: {
@@ -103,7 +104,6 @@ export default class ConsultationScreen extends React.Component<
               <List.Item
                 key={report.id}
                 title={`Semaine ${report.week} à ${report.base}`}
-                onPress={() => {}}
               />
             ))}
         </ScrollView>
