@@ -1,7 +1,7 @@
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Chip } from "react-native-elements/dist/buttons/Chip";
+import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { Chip, List } from "react-native-paper";
 import { ShiftReport } from "../types/shiftReport";
 import { DrugReport } from "../types/drugReport";
 import fetch from "../utils/fetch";
@@ -51,27 +51,33 @@ export default class ConsultationScreen extends React.Component<
       <View style={styles.container}>
         <ScrollView
           horizontal={true}
-          contentContainerStyle={styles.chip}
-          style={{ maxHeight: 80 }}
+          contentContainerStyle={{ padding: 12 }}
+          style={{ flexGrow: 0 }}
           snapToStart={true}
         >
           <View>
             <Chip
-              title="Garde"
-              onPress={(e) => {
+              style={styles.chip}
+              textStyle={{ padding: 4 }}
+              selected={tab === "shift"}
+              onPress={() => {
                 this.setState({ tab: "shift" });
               }}
-              buttonStyle={[styles.chip, { backgroundColor: "#0a2ab8" }]}
-            />
+            >
+              Garde
+            </Chip>
           </View>
           <View>
             <Chip
-              title="Stupéfiants"
-              onPress={(e) => {
+              style={styles.chip}
+              textStyle={{ padding: 4 }}
+              selected={tab === "drug"}
+              onPress={() => {
                 this.setState({ tab: "drug" });
               }}
-              buttonStyle={styles.chip}
-            />
+            >
+              Stupéfiants
+            </Chip>
           </View>
         </ScrollView>
         <ScrollView
@@ -82,15 +88,19 @@ export default class ConsultationScreen extends React.Component<
         >
           {tab === "shift" &&
             reports.shift.map((report: ShiftReport) => (
-              <Text key={report.id} style={styles.listItem}>
-                Le {report.date} à {report.base}
-              </Text>
+              <List.Item
+                key={report.id}
+                title={`Le ${report.date} à ${report.base}`}
+                onPress={() => {}}
+              />
             ))}
           {tab === "drug" &&
             reports.drug.map((report: DrugReport) => (
-              <Text key={report.id} style={styles.listItem}>
-                Semaine {report.week} à {report.base}
-              </Text>
+              <List.Item
+                key={report.id}
+                title={` Semaine ${report.week} à ${report.base}`}
+                onPress={() => {}}
+              />
             ))}
         </ScrollView>
       </View>
@@ -105,14 +115,10 @@ const styles = StyleSheet.create({
   },
   chip: {
     marginRight: 8,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+    borderRadius: 50,
   },
   contentScrollView: {
     flex: 2,
     width: "100%",
-  },
-  listItem: {
-    padding: 12,
   },
 });
