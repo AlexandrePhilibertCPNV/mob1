@@ -6,10 +6,10 @@ import * as SecureStore from "expo-secure-store";
 
 import Colors from "./constants/Colors";
 import Navigation from "./navigation";
-import { DefaultTheme } from "@react-navigation/native";
 
 interface UserContextValue {
   initials?: string;
+  token?: string;
 }
 
 export const UserContext = React.createContext<UserContextValue | null>({});
