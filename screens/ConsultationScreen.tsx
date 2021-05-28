@@ -3,12 +3,15 @@ import { StyleSheet, Text, View } from "react-native";
 import { Chip } from "react-native-elements/dist/buttons/Chip";
 import { ScrollView } from "react-native-gesture-handler";
 import { ShiftReport } from "../types/shiftReport";
+import { DrugReport } from "../types/drugReport";
 import fetch from "../utils/fetch";
 
 interface ConsultationScreenState {
   reports: {
     shift: ShiftReport[];
+    drug: DrugReport[];
   };
+  tab: "shift" | "drug";
 }
 
 export default class ConsultationScreen extends React.Component<
@@ -18,7 +21,9 @@ export default class ConsultationScreen extends React.Component<
   state: ConsultationScreenState = {
     reports: {
       shift: [],
+      drug: [],
     },
+    tab: "shift",
   };
 
   componentDidMount() {
@@ -40,36 +45,53 @@ export default class ConsultationScreen extends React.Component<
   }
 
   render() {
-    const { reports } = this.state;
+    const { tab, reports } = this.state;
 
     return (
       <View style={styles.container}>
         <ScrollView
           horizontal={true}
           contentContainerStyle={styles.chip}
+          style={{ maxHeight: 80 }}
           snapToStart={true}
         >
           <View>
             <Chip
               title="Garde"
-              onPress={(e) => {}}
+              onPress={(e) => {
+                this.setState({ tab: "shift" });
+              }}
               buttonStyle={[styles.chip, { backgroundColor: "#0a2ab8" }]}
             />
           </View>
           <View>
             <Chip
               title="Stupéfiants"
-              onPress={(e) => {}}
+              onPress={(e) => {
+                this.setState({ tab: "drug" });
+              }}
               buttonStyle={styles.chip}
             />
           </View>
         </ScrollView>
-        <ScrollView style={styles.contentScrollView}>
-          {reports.shift.map((report: ShiftReport) => (
-            <Text key={report.id}>
-              Le {report.date} à {report.base}
-            </Text>
-          ))}
+        <ScrollView
+          style={styles.contentScrollView}
+          contentContainerStyle={{
+            flex: 2,
+          }}
+        >
+          {tab === "shift" &&
+            reports.shift.map((report: ShiftReport) => (
+              <Text key={report.id} style={styles.listItem}>
+                Le {report.date} à {report.base}
+              </Text>
+            ))}
+          {tab === "drug" &&
+            reports.drug.map((report: DrugReport) => (
+              <Text key={report.id} style={styles.listItem}>
+                Semaine {report.week} à {report.base}
+              </Text>
+            ))}
         </ScrollView>
       </View>
     );
@@ -87,7 +109,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   contentScrollView: {
-    flex: 1,
+    flex: 2,
     width: "100%",
+  },
+  listItem: {
+    padding: 12,
   },
 });
