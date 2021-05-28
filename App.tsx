@@ -14,16 +14,6 @@ interface UserContextValue {
 
 export const UserContext = React.createContext<UserContextValue | null>({});
 
-const theme = {
-  ...DefaultTheme,
-  roundness: 2,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: "#3498db",
-    accent: "#f1c40f",
-  },
-};
-
 export default class App extends React.Component {
   state = {
     user: null,
