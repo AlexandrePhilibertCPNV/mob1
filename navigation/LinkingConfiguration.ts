@@ -17,9 +17,9 @@ export default {
               TabConsultationScreen: "consultation",
             },
           },
-          TabTwo: {
+          TabReport: {
             screens: {
-              TabTwoScreen: "two",
+              ReportScreen: "report",
             },
           },
         },
