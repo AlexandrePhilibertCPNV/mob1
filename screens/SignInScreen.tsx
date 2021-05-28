@@ -6,8 +6,8 @@ import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { TextInput } from "../components/TextInput";
-import { UserContext } from "../App";
 import fetch from "../utils/fetch";
+import { UserContext } from "../contexts/userContext";
 
 interface SignInScreenState {
   bases: Base[];
@@ -27,6 +27,8 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
       currentBaseId: 0,
     },
   };
+
+  static contextType = UserContext;
 
   constructor(props: React.ComponentProps<"view">) {
     super(props);
@@ -99,10 +101,16 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
     });
 
     if (response.status === 200) {
-      await SecureStore.setItemAsync("token", response.data.token);
+      const { token } = response.data;
+      await SecureStore.setItemAsync("token", token);
 
       await AsyncStorage.setItem("initials", initials);
       await AsyncStorage.setItem("currentBaseId", currentBaseId.toString());
+
+      this.context.setUser({
+        ...this.state.user,
+        token,
+      });
     } else {
       // TODO: Display error message
     }
@@ -112,59 +120,53 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
     const { user, bases } = this.state;
 
     return (
-      <UserContext.Consumer>
-        {(userContext) => (
-          <View style={styles.container}>
-            <Image
-              style={styles.logo}
-              source={require("../assets/images/logo.png")}
-            />
-            <View style={styles.form}>
-              <TextInput
-                style={styles.textinput}
-                placeholder="Initiales"
-                autoCorrect={false}
-                autoFocus={true}
-                onChangeText={this.setInitials}
-                maxLength={3}
-                defaultValue={userContext?.initials}
-              />
-              <TextInput
-                style={styles.textinput}
-                placeholder="Mot de passe"
-                autoCorrect={false}
-                secureTextEntry={true}
-                underlineColorAndroid="transparent"
-                onChangeText={this.setPassword}
-              />
-            </View>
-            <Picker
-              style={styles.basePicker}
-              selectedValue={user.currentBaseId}
-              onValueChange={this.setCurrentBase}
-              mode="dialog"
-            >
-              {bases.map((base: Base) => (
-                <Picker.Item key={base.id} label={base.name} value={base.id} />
-              ))}
-            </Picker>
-            <TouchableOpacity
-              style={styles.loginButton}
-              accessibilityLabel="Se connecter"
-              accessibilityRole="button"
-              activeOpacity={0.8}
-              onPress={this.handleSignIn}
-            >
-              <Text style={styles.loginButtonText}>Se connecter</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </UserContext.Consumer>
+      <View style={styles.container}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/images/logo.png")}
+        />
+        <View style={styles.form}>
+          <TextInput
+            style={styles.textinput}
+            placeholder="Initiales"
+            autoCorrect={false}
+            autoFocus={true}
+            onChangeText={this.setInitials}
+            maxLength={3}
+            defaultValue={this.context?.initials}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Mot de passe"
+            autoCorrect={false}
+            secureTextEntry={true}
+            underlineColorAndroid="transparent"
+            onChangeText={this.setPassword}
+          />
+        </View>
+        <Picker
+          style={styles.basePicker}
+          selectedValue={user.currentBaseId}
+          onValueChange={this.setCurrentBase}
+          mode="dialog"
+        >
+          {bases.map((base: Base) => (
+            <Picker.Item key={base.id} label={base.name} value={base.id} />
+          ))}
+        </Picker>
+        <TouchableOpacity
+          style={styles.loginButton}
+          accessibilityLabel="Se connecter"
+          accessibilityRole="button"
+          activeOpacity={0.8}
+          onPress={this.handleSignIn}
+        >
+          <Text style={styles.loginButtonText}>Se connecter</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
-
-SignInScreen.contextType = UserContext;
 
 const styles = StyleSheet.create({
   container: {
@@ -172,6 +174,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 24,
+    backgroundColor: "#f1f1f1",
   },
   logo: {
     width: 125,

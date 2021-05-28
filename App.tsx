@@ -7,17 +7,11 @@ import * as SecureStore from "expo-secure-store";
 import Colors from "./constants/Colors";
 import Navigation from "./navigation";
 import { SplashScreen } from "./screens/SplashScreen";
-
-interface UserContextValue {
-  initials?: string;
-  token?: string;
-}
-
-export const UserContext = React.createContext<UserContextValue | null>({});
+import { UserContext } from "./contexts/userContext";
 
 export default class App extends React.Component {
   state = {
-    user: null,
+    user: {},
     isLoading: true,
   };
 
@@ -30,7 +24,7 @@ export default class App extends React.Component {
       user: {
         initials,
         token,
-        currentBaseId,
+        currentBaseId: Number(currentBaseId),
       },
       isLoading: false,
     });
@@ -44,7 +38,17 @@ export default class App extends React.Component {
     }
 
     return (
-      <UserContext.Provider value={user}>
+      <UserContext.Provider
+        value={{
+          ...user,
+          setUser: (newUser) => {
+            this.setState({ user: newUser });
+          },
+          clear: () => {
+            this.setState({ user: {} });
+          },
+        }}
+      >
         <SafeAreaProvider>
           <Navigation />
           <StatusBar backgroundColor={Colors.light.primary} />

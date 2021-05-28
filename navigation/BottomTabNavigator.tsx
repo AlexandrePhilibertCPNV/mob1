@@ -8,10 +8,12 @@ import ReportSreen from "../screens/ReportScreen";
 import {
   BottomTabParamList,
   TabConsultationParamList,
-  TabTwoParamList as ReportParamList,
+  TabReportParamList,
 } from "../types";
-import { UserContext } from "../App";
 import ActionsScreen from "../screens/ActionsScreen";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Text } from "react-native";
+import { UserContext } from "../contexts/userContext";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -30,9 +32,10 @@ export default class BottomTabNavigator extends React.Component {
           }}
         />
         <BottomTab.Screen
-          name="TabTwo"
-          component={TabTwoNavigator}
+          name="TabReport"
+          component={ReportNavigator}
           options={{
+            title: "Rapporter",
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="ios-code" color={color} />
             ),
@@ -68,12 +71,14 @@ class TabConsultationNavigator extends React.Component {
           options={{
             headerTitle: "Consultation",
             headerRight: () => (
-              <Ionicons
-                name="ellipsis-vertical-sharp"
-                size={16}
-                style={{ padding: 12 }}
-                onPress={() => {}}
-              />
+              <TouchableOpacity
+                style={{ padding: 8 }}
+                onPress={() => {
+                  this.context.clear();
+                }}
+              >
+                <Text>Déconnexion</Text>
+              </TouchableOpacity>
             ),
           }}
         />
@@ -83,16 +88,18 @@ class TabConsultationNavigator extends React.Component {
   }
 }
 
-const ReportStack = createStackNavigator<ReportParamList>();
+const ReportStack = createStackNavigator<TabReportParamList>();
 
-class TabTwoNavigator extends React.Component {
+class ReportNavigator extends React.Component {
   render() {
     return (
       <ReportStack.Navigator>
         <ReportStack.Screen
           name="ReportScreen"
           component={ReportSreen}
-          options={{ headerTitle: "Rapporter" }}
+          options={{
+            headerTitle: "Rapporter",
+          }}
         />
       </ReportStack.Navigator>
     );
