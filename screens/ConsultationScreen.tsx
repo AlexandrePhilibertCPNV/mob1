@@ -5,7 +5,7 @@ import { Chip, List } from "react-native-paper";
 import { ShiftReport } from "../types/shiftReport";
 import { DrugReport } from "../types/drugReport";
 import fetch from "../utils/fetch";
-import { NavigationProp } from "@react-navigation/core";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 interface ConsultationScreenState {
   reports: {
@@ -16,7 +16,7 @@ interface ConsultationScreenState {
 }
 
 export default class ConsultationScreen extends React.Component<
-  {},
+  { navigation: StackNavigationProp<{ Actions: { report: ShiftReport } }> },
   ConsultationScreenState
 > {
   state: ConsultationScreenState = {
@@ -47,6 +47,7 @@ export default class ConsultationScreen extends React.Component<
 
   render() {
     const { tab, reports } = this.state;
+    const { navigation } = this.props;
 
     return (
       <View style={styles.container}>
@@ -93,7 +94,7 @@ export default class ConsultationScreen extends React.Component<
                 key={report.id}
                 title={`Le ${report.date} à ${report.base}`}
                 onPress={() => {
-                  this.props.navigation.navigate("Actions", {
+                  navigation.navigate("Actions", {
                     report,
                   });
                 }}
