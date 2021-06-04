@@ -1,12 +1,16 @@
+import format from "date-fns/format";
+import { frCH } from "date-fns/locale";
+import _ from "lodash";
 import * as React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Chip, List } from "react-native-paper";
-import { UserContext } from "../App";
-import fetch from "../utils/fetch";
+import { UserContext } from "../contexts/userContext";
+import { normalizeDateString } from "../utils/date";
+import fetch, { withBearer } from "../utils/fetch";
 
 type PharmaCheck = {
   id: number;
-  date: string;
+  date: string | Date;
   start: number;
   end: number | null;
   batch_id: number;
@@ -15,8 +19,18 @@ type PharmaCheck = {
   batch_number: string;
 };
 
+type NovaCheck = {
+  date: string;
+  nova: number;
+  nova_id: number;
+  drug: string;
+  drug_id: number;
+  drugsheet_id: number;
+};
+
 interface ReportScreenState {
-  pharma: PharmaCheck[];
+  pharma: any;
+  nova: NovaCheck[];
   tab: "pharmacheck" | "novacheck";
 }
 export default class ReportSreen extends React.Component<
@@ -25,6 +39,7 @@ export default class ReportSreen extends React.Component<
 > {
   state: ReportScreenState = {
     pharma: [],
+    nova: [],
     tab: "pharmacheck",
   };
 
@@ -35,21 +50,26 @@ export default class ReportSreen extends React.Component<
   }
 
   async fetchMissingChecks() {
-    const { currentBaseId: baseId } = this.context;
-    const { data } = await fetch(`/missingchecks/${baseId}`, {
-      headers: {
-        Authorization:
-          "Bearer 14eTrlt8sbWSQQiNME7xkkXH0aQsheWmf2ySIwL6mQWn4vxdKkC5afRSddKM",
-      },
+    const { currentBaseId: baseId, token } = this.context;
+    const { data } = await fetch<{
+      pharma: PharmaCheck[];
+      nova: NovaCheck[];
+    }>(`/missingchecks/${baseId}`, withBearer(token));
+
+    const pharma = data.pharma.map((item) => {
+      item.date = new Date(normalizeDateString(item.date as string));
+
+      return item;
     });
 
     this.setState({
-      pharma: data.pharma,
+      nova: data.nova,
+      pharma: Object.values(_.groupBy(pharma, (item) => item.date)),
     });
   }
 
   render() {
-    const { pharma, tab } = this.state;
+    const { pharma, nova, tab } = this.state;
 
     return (
       <View style={styles.container}>
@@ -85,9 +105,27 @@ export default class ReportSreen extends React.Component<
           </View>
         </ScrollView>
         <ScrollView>
-          {pharma.map((item) => (
-            <List.Item title={item.drug} />
-          ))}
+          {tab === "pharmacheck" &&
+            pharma.map((dateGroup: PharmaCheck[], i: string) => (
+              <List.Section
+                key={i}
+                title={format(dateGroup[0].date as Date, "'le' i MMMM", {
+                  locale: frCH,
+                })}
+              >
+                {dateGroup.map((item: PharmaCheck) => (
+                  <List.Item
+                    key={item.id}
+                    title={item.batch_number}
+                    description={item.drug}
+                    onPress={() => {}}
+                  ></List.Item>
+                ))}
+              </List.Section>
+            ))}
+
+          {tab === "novacheck" &&
+            nova.map((item, i) => <List.Item key={i} title={item.drug} />)}
         </ScrollView>
       </View>
     );
