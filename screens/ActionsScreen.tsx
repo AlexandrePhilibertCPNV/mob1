@@ -2,7 +2,8 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { List, Title } from "react-native-paper";
-import fetch from "../utils/fetch";
+import { UserContext } from "../contexts/userContext";
+import fetch, { withBearer } from "../utils/fetch";
 
 type ReportDetails = {
   id: number;
@@ -23,18 +24,20 @@ export default class ActionsScreen extends React.Component<
     details: [],
   };
 
+  static contextType = UserContext;
+
   componentDidMount() {
     this.fetchReportDetails();
   }
 
   async fetchReportDetails() {
     const { report } = this.props.route.params;
-    const { data } = await fetch(`/myactionsinshift/${report.id}`, {
-      headers: {
-        Authorization:
-          "Bearer 14eTrlt8sbWSQQiNME7xkkXH0aQsheWmf2ySIwL6mQWn4vxdKkC5afRSddKM",
-      },
-    });
+    const { token } = this.context;
+
+    const { data } = await fetch(
+      `/myactionsinshift/${report.id}`,
+      withBearer(token)
+    );
 
     this.setState({ details: data.data });
   }

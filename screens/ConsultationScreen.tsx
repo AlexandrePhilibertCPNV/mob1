@@ -4,8 +4,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Chip, List } from "react-native-paper";
 import { ShiftReport } from "../types/shiftReport";
 import { DrugReport } from "../types/drugReport";
-import fetch from "../utils/fetch";
+import fetch, { withBearer } from "../utils/fetch";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { UserContext } from "../contexts/userContext";
 
 interface ConsultationScreenState {
   reports: {
@@ -27,17 +28,16 @@ export default class ConsultationScreen extends React.Component<
     tab: "shift",
   };
 
+  static contextType = UserContext;
+
   componentDidMount() {
     this.fetchReports();
   }
 
   async fetchReports() {
-    const response = await fetch("/reports", {
-      headers: {
-        Authorization:
-          "Bearer 14eTrlt8sbWSQQiNME7xkkXH0aQsheWmf2ySIwL6mQWn4vxdKkC5afRSddKM",
-      },
-    });
+    const { token } = this.context;
+
+    const response = await fetch("/reports", withBearer(token));
 
     if (response.status === 200) {
       const reports = response.data;
