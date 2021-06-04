@@ -44,3 +44,18 @@ export default async <T = any>(
     statusText: response.statusText,
   };
 };
+
+/**
+ * Helper function that takes a token as argument and returns fetch headers
+ *
+ * @export
+ * @param {string} token
+ * @return { headers: HeadersInit }
+ */
+export function withBearer(token: string): { headers: HeadersInit } {
+  return {
+    headers: {
+      Authorization: `Bearer ${token.trim()}`,
+    },
+  };
+}
