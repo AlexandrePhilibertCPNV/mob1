@@ -1,8 +1,10 @@
+import { NavigationProp, RouteProp } from "@react-navigation/core";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { List, Title } from "react-native-paper";
 import { UserContext } from "../contexts/userContext";
+import { TabReportParamList } from "../types";
 import fetch, { withBearer } from "../utils/fetch";
 
 type ReportDetails = {
@@ -17,7 +19,7 @@ interface ActionsScreenState {
 }
 
 export default class ActionsScreen extends React.Component<
-  {},
+  { route: RouteProp<TabReportParamList, "ReportScreen"> },
   ActionsScreenState
 > {
   state: ActionsScreenState = {

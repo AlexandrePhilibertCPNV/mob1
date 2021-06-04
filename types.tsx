@@ -3,6 +3,8 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
+import { ShiftReport } from "./types/shiftReport";
+
 export type BottomTabParamList = {
   TabConsultation: undefined;
   TabReport: undefined;
@@ -14,5 +16,7 @@ export type TabConsultationParamList = {
 };
 
 export type TabReportParamList = {
-  ReportScreen: undefined;
+  ReportScreen: {
+    report: ShiftReport;
+  };
 };
