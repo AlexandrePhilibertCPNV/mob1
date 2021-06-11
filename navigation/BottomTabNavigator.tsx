@@ -13,7 +13,7 @@ import {
 import ActionsScreen from "../screens/ActionsScreen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Text } from "react-native";
-import { UserContext } from "../contexts/userContext";
+import { UserContext } from "../contexts/UserContext";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 

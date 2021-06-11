@@ -4,7 +4,7 @@ import _ from "lodash";
 import * as React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Chip, List } from "react-native-paper";
-import { UserContext } from "../contexts/userContext";
+import { UserContext } from "../contexts/UserContext";
 import { normalizeDateString } from "../utils/date";
 import fetch, { withBearer } from "../utils/fetch";
 

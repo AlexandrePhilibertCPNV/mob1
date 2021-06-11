@@ -4,7 +4,7 @@ import React from "react";
 import { SignInScreen } from "../screens/SignInScreen";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
-import { UserContext } from "../contexts/userContext";
+import { UserContext } from "../contexts/UserContext";
 
 export default class Navigation extends React.Component {
   static contextType = UserContext;

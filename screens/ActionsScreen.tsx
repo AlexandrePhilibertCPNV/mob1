@@ -3,7 +3,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { List, Title } from "react-native-paper";
-import { UserContext } from "../contexts/userContext";
+import { UserContext } from "../contexts/UserContext";
 import { TabReportParamList } from "../types";
 import fetch, { withBearer } from "../utils/fetch";
 

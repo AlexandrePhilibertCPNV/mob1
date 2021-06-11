@@ -8,7 +8,7 @@ import Toast from "react-native-root-toast";
 
 import { TextInput } from "../components/TextInput";
 import fetch from "../utils/fetch";
-import { UserContext } from "../contexts/userContext";
+import { UserContext } from "../contexts/UserContext";
 import { getToken } from "../requests/getToken";
 
 interface SignInScreenState {

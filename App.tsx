@@ -8,7 +8,7 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import Colors from "./constants/Colors";
 import Navigation from "./navigation";
 import { SplashScreen } from "./screens/SplashScreen";
-import { UserContext } from "./contexts/userContext";
+import { UserContext } from "./contexts/UserContext";
 
 export default class App extends React.Component {
   state = {

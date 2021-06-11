@@ -6,7 +6,7 @@ import { ShiftReport } from "../types/shiftReport";
 import { DrugReport } from "../types/drugReport";
 import fetch, { withBearer } from "../utils/fetch";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { UserContext } from "../contexts/userContext";
+import { UserContext } from "../contexts/UserContext";
 
 interface ConsultationScreenState {
   reports: {
