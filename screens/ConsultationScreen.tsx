@@ -2,10 +2,11 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Chip, List } from "react-native-paper";
+import { StackNavigationProp } from "@react-navigation/stack";
+
 import { ShiftReport } from "../types/shiftReport";
 import { DrugReport } from "../types/drugReport";
 import fetch, { withBearer } from "../utils/fetch";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { UserContext } from "../contexts/UserContext";
 
 interface ConsultationScreenState {

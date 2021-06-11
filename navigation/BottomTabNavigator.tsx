@@ -2,17 +2,17 @@ import * as React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Text } from "react-native";
 
-import ConsultationScreen from "../screens/ConsultationScreen";
-import ReportSreen from "../screens/ReportScreen";
 import {
   BottomTabParamList,
   TabConsultationParamList,
   TabReportParamList,
 } from "../types";
+import ConsultationScreen from "../screens/ConsultationScreen";
+import ReportSreen from "../screens/ReportScreen";
 import ActionsScreen from "../screens/ActionsScreen";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Text } from "react-native";
 import { UserContext } from "../contexts/UserContext";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();

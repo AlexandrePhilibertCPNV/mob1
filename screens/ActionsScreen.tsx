@@ -1,8 +1,9 @@
-import { NavigationProp, RouteProp } from "@react-navigation/core";
+import { RouteProp } from "@react-navigation/core";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { List, Title } from "react-native-paper";
+
 import { UserContext } from "../contexts/UserContext";
 import { TabReportParamList } from "../types";
 import fetch, { withBearer } from "../utils/fetch";
