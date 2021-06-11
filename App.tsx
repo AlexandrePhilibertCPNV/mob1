@@ -45,8 +45,9 @@ export default class App extends React.Component {
           setUser: (newUser) => {
             this.setState({ user: newUser });
           },
-          clear: () => {
+          clear: async () => {
             this.setState({ user: {} });
+            await SecureStore.deleteItemAsync("token");
           },
         }}
       >
