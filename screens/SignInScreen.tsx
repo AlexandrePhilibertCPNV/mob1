@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TextInput } from "../components/TextInput";
 import fetch from "../utils/fetch";
 import { UserContext } from "../contexts/userContext";
+import { getToken } from "../requests/getToken";
 
 interface SignInScreenState {
   bases: Base[];
@@ -87,7 +88,7 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
   async handleSignIn() {
     const { initials, password, currentBaseId } = this.state.user;
 
-    const formData = new FormData();
+    const response = await getToken({ initials, password });
 
     formData.append("initials", initials);
     formData.append("password", password);
