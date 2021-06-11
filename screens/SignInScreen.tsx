@@ -4,6 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-root-toast";
 
 import { TextInput } from "../components/TextInput";
 import fetch from "../utils/fetch";
@@ -43,19 +44,27 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
   componentDidMount() {
     this.fetchBases();
 
-    this.setState({
-      user: {
-        ...this.state.user,
-        initials: this.context.initials,
-      },
-    });
+    const { initials } = this.context;
+
+    if (initials) {
+      this.setState({
+        user: {
+          ...this.state.user,
+          initials: initials,
+        },
+      });
+    }
   }
 
   async fetchBases() {
-    const response = await fetch<Base[]>("/bases");
-    const bases = response.data;
-
-    this.setState({ bases });
+    try {
+      const response = await fetch<Base[]>("/bases");
+      this.setState({ bases: response.data });
+    } catch (e) {
+      Toast.show("Une erreure est survenue", {
+        duration: Toast.durations.LONG,
+      });
+    }
   }
 
   setInitials(initials: string) {
@@ -85,23 +94,24 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
     });
   }
 
+  async doHandleSignIn(initials: string, password: string) {
+    try {
+      const response = await getToken({ initials, password });
+
+      return response;
+    } catch (e) {
+      Toast.show("Une erreure est survenue", {
+        duration: Toast.durations.LONG,
+      });
+    }
+  }
+
   async handleSignIn() {
     const { initials, password, currentBaseId } = this.state.user;
 
-    const response = await getToken({ initials, password });
+    const response = await this.doHandleSignIn(initials, password);
 
-    formData.append("initials", initials);
-    formData.append("password", password);
-
-    const response = await fetch("/gettoken", {
-      method: "POST",
-      body: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    if (response.status === 200) {
+    if (response?.status === 200) {
       const { token } = response.data;
 
       await Promise.all([
@@ -115,7 +125,9 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
         token,
       });
     } else {
-      // TODO: Display error message
+      Toast.show("Une erreure est survenue", {
+        duration: Toast.durations.LONG,
+      });
     }
   }
 
@@ -163,6 +175,7 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
           accessibilityRole="button"
           activeOpacity={0.8}
           onPress={this.handleSignIn}
+          disabled={user.initials.length === 0 && user.password.length === 0}
         >
           <Text style={styles.loginButtonText}>Se connecter</Text>
         </TouchableOpacity>
