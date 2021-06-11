@@ -6,28 +6,10 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { Chip, List } from "react-native-paper";
 
 import { UserContext } from "../contexts/UserContext";
+import { PharmaCheck } from "../types/PharmaCheck";
+import { NovaCheck } from "../types/NovaCheck";
 import { normalizeDateString } from "../utils/date";
 import fetch, { withBearer } from "../utils/fetch";
-
-type PharmaCheck = {
-  id: number;
-  date: string | Date;
-  start: number;
-  end: number | null;
-  batch_id: number;
-  drugsheet_id: number;
-  drug: string;
-  batch_number: string;
-};
-
-type NovaCheck = {
-  date: string;
-  nova: number;
-  nova_id: number;
-  drug: string;
-  drug_id: number;
-  drugsheet_id: number;
-};
 
 interface ReportScreenState {
   pharma: any;
