@@ -1,8 +1,12 @@
 import React from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 export class SplashScreen extends React.Component {
   render() {
-    return <View></View>;
+    return (
+      <View>
+        <Text>Chargement..</Text>
+      </View>
+    );
   }
 }
