@@ -113,9 +113,9 @@ export default class ReportSreen extends React.Component<
                   locale: frCH,
                 })}
               >
-                {dateGroup.map((item: PharmaCheck) => (
+                {dateGroup.map((item: PharmaCheck, i) => (
                   <List.Item
-                    key={item.id}
+                    key={i}
                     title={item.batch_number}
                     description={item.drug}
                     onPress={() => {}}
