@@ -1,4 +1,4 @@
-export type DrugReport = {
+type DrugReport = {
   id: number;
   week: number;
   base: String;

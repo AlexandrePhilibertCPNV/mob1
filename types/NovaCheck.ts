@@ -1,4 +1,4 @@
-export type NovaCheck = {
+type NovaCheck = {
   date: string;
   nova: number;
   nova_id: number;

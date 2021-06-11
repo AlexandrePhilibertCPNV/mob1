@@ -1,4 +1,4 @@
-export type PharmaCheck = {
+type PharmaCheck = {
   id: number;
   date: string | Date;
   start: number;
