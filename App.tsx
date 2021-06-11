@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as SecureStore from "expo-secure-store";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 import Colors from "./constants/Colors";
 import Navigation from "./navigation";
@@ -50,8 +51,10 @@ export default class App extends React.Component {
         }}
       >
         <SafeAreaProvider>
-          <Navigation />
-          <StatusBar backgroundColor={Colors.light.primary} />
+          <RootSiblingParent>
+            <Navigation />
+            <StatusBar backgroundColor={Colors.light.primary} />
+          </RootSiblingParent>
         </SafeAreaProvider>
       </UserContext.Provider>
     );
