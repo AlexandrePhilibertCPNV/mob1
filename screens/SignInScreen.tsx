@@ -102,10 +102,12 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
 
     if (response.status === 200) {
       const { token } = response.data;
-      await SecureStore.setItemAsync("token", token);
 
-      await AsyncStorage.setItem("initials", initials);
-      await AsyncStorage.setItem("currentBaseId", currentBaseId.toString());
+      await Promise.all([
+        SecureStore.setItemAsync("token", token),
+        AsyncStorage.setItem("initials", initials),
+        AsyncStorage.setItem("currentBaseId", currentBaseId.toString()),
+      ]);
 
       this.context.setUser({
         ...this.state.user,
