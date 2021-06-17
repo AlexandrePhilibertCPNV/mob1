@@ -11,7 +11,7 @@ import {
   TabReportParamList,
 } from "../types";
 import ConsultationScreen from "../screens/ConsultationScreen";
-import ReportSreen from "../screens/ReportScreen";
+import ReportScreen from "../screens/ReportScreen";
 import ActionsScreen from "../screens/ActionsScreen";
 import { UserContext } from "../contexts/UserContext";
 
@@ -98,7 +98,7 @@ class ReportNavigator extends React.Component {
       <ReportStack.Navigator>
         <ReportStack.Screen
           name="ReportScreen"
-          component={ReportSreen}
+          component={ReportScreen}
           options={{
             headerTitle: "Rapporter",
           }}

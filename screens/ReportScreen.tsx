@@ -16,7 +16,7 @@ interface ReportScreenState {
   nova: NovaCheck[];
   tab: "pharmacheck" | "novacheck";
 }
-export default class ReportSreen extends React.Component<
+export default class ReportScreen extends React.Component<
   {},
   ReportScreenState
 > {
