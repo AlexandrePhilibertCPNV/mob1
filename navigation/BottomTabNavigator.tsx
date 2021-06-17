@@ -63,6 +63,8 @@ class TabConsultationNavigator extends React.Component {
   static contextType = UserContext;
 
   render() {
+    const { initials } = this.context;
+
     return (
       <TabConsultationStack.Navigator>
         <TabConsultationStack.Screen
@@ -77,7 +79,7 @@ class TabConsultationNavigator extends React.Component {
                   this.context.clear();
                 }}
               >
-                <Text>Déconnexion</Text>
+                <Text>Déconnexion - {initials}</Text>
               </TouchableOpacity>
             ),
           }}
