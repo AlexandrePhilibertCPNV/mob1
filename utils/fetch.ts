@@ -16,11 +16,16 @@ export default async <T = any>(
 ): Promise<FetchResponse<T>> => {
   const isFormData = customOptions.body instanceof FormData;
 
+  // Content-Type header should not be json if we are sending form-data content
+  const headers: HeadersInit = isFormData
+    ? {}
+    : { "Content-Type": "application/json" };
+
   const options: RequestInit = {
     method: "GET",
     ...customOptions,
     headers: {
-      "Content-Type": "application/json",
+      ...headers,
       ...customOptions.headers,
     },
   };
@@ -30,15 +35,19 @@ export default async <T = any>(
   }
 
   const cleanedUrl = cleanUrl(url);
-
   const response = await fetch(cleanedUrl, options);
 
-  const response = await fetch(cleanPath, options);
-
-  const data = await response.json();
+  const contentType = response.headers.get("content-type");
+  if (contentType?.includes("application/json")) {
+    return {
+      data: await response.json(),
+      status: response.status,
+      statusText: response.statusText,
+    };
+  }
 
   return {
-    data,
+    data: {} as T,
     status: response.status,
     statusText: response.statusText,
   };
