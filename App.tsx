@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as SecureStore from "expo-secure-store";
 import { RootSiblingParent } from "react-native-root-siblings";
+import { Portal, Provider } from "react-native-paper";
 
 import Colors from "./constants/Colors";
 import Navigation from "./navigation";
@@ -52,10 +53,14 @@ export default class App extends React.Component {
         }}
       >
         <SafeAreaProvider>
-          <RootSiblingParent>
-            <Navigation />
-            <StatusBar backgroundColor={Colors.light.primary} />
-          </RootSiblingParent>
+          <Provider>
+            <Portal.Host>
+              <RootSiblingParent>
+                <Navigation />
+                <StatusBar backgroundColor={Colors.light.primary} />
+              </RootSiblingParent>
+            </Portal.Host>
+          </Provider>
         </SafeAreaProvider>
       </UserContext.Provider>
     );
