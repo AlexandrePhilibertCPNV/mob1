@@ -1,3 +1,5 @@
+const apiUrl = "http://10.0.2.2:8000/api/";
+
 type FetchResponse<T> = {
   data: T;
   status: number;
@@ -9,7 +11,7 @@ interface CustomOptions extends RequestInit {
 }
 
 export default async <T = any>(
-  path: string,
+  url: string,
   customOptions: CustomOptions = { headers: {} }
 ): Promise<FetchResponse<T>> => {
   const isFormData = customOptions.body instanceof FormData;
@@ -27,12 +29,9 @@ export default async <T = any>(
     options.body = JSON.stringify(customOptions.body);
   }
 
-  // Remove the trailing slash
-  let cleanPath = path.replace(/^\//, "");
+  const cleanedUrl = cleanUrl(url);
 
-  if (!cleanPath.startsWith("http")) {
-    cleanPath = `http://10.0.2.2:8000/api/${cleanPath}`;
-  }
+  const response = await fetch(cleanedUrl, options);
 
   const response = await fetch(cleanPath, options);
 
@@ -44,6 +43,24 @@ export default async <T = any>(
     statusText: response.statusText,
   };
 };
+
+/**
+ * /some/path/ -> /some/path
+ * https://example.com/other/path/ -> https://example.com/other/path
+ *
+ * @param {string} url
+ * @return {string} The cleaned path
+ */
+function cleanUrl(url: string): string {
+  // Remove the trailing slash
+  let cleanPath = url.replace(/^\//, "");
+
+  if (!cleanPath.startsWith("http")) {
+    cleanPath = `${apiUrl}${cleanPath}`;
+  }
+
+  return cleanPath;
+}
 
 /**
  * Helper function that takes a token as argument and returns fetch headers
