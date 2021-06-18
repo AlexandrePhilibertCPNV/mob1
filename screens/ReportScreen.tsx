@@ -2,19 +2,19 @@ import format from "date-fns/format";
 import { frCH } from "date-fns/locale";
 import _ from "lodash";
 import * as React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { Chip, List } from "react-native-paper";
+import { ScrollView, StyleSheet, View, Text } from "react-native";
+import { Chip, List, Modal, Portal, TextInput } from "react-native-paper";
 
 import { UserContext } from "../contexts/UserContext";
-import { PharmaCheck } from "../types/PharmaCheck";
-import { NovaCheck } from "../types/NovaCheck";
+import { CompleteCheckModal } from "../modals/CompleteCheckModal";
 import { normalizeDateString } from "../utils/date";
 import fetch, { withBearer } from "../utils/fetch";
 
 interface ReportScreenState {
-  pharma: any;
+  pharma: PharmaCheck[][];
   nova: NovaCheck[];
   tab: "pharmacheck" | "novacheck";
+  selectedItem: any;
 }
 export default class ReportScreen extends React.Component<
   {},
@@ -24,6 +24,7 @@ export default class ReportScreen extends React.Component<
     pharma: [],
     nova: [],
     tab: "pharmacheck",
+    selectedItem: null,
   };
 
   static contextType = UserContext;
@@ -52,10 +53,15 @@ export default class ReportScreen extends React.Component<
   }
 
   render() {
-    const { pharma, nova, tab } = this.state;
+    const { pharma, nova, tab, selectedItem } = this.state;
 
     return (
       <View style={styles.container}>
+        <CompleteCheckModal
+          type={tab}
+          item={selectedItem}
+          onDismiss={() => this.setState({ selectedItem: null })}
+        />
         <ScrollView
           horizontal={true}
           contentContainerStyle={{ padding: 12 }}
@@ -89,7 +95,7 @@ export default class ReportScreen extends React.Component<
         </ScrollView>
         <ScrollView>
           {tab === "pharmacheck" &&
-            pharma.map((dateGroup: PharmaCheck[], i: string) => (
+            pharma.map((dateGroup: PharmaCheck[], i: number) => (
               <List.Section
                 key={i}
                 title={format(dateGroup[0].date as Date, "'le' i MMMM", {
@@ -101,7 +107,15 @@ export default class ReportScreen extends React.Component<
                     key={i}
                     title={item.batch_number}
                     description={item.drug}
-                    onPress={() => {}}
+                    right={() => (
+                      <View>
+                        {item.start && <Text>matin: {item.start}</Text>}
+                        {item.end && <Text>soir: {item.end}</Text>}
+                      </View>
+                    )}
+                    onPress={() => {
+                      this.setState({ selectedItem: item });
+                    }}
                   ></List.Item>
                 ))}
               </List.Section>
