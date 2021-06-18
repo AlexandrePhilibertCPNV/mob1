@@ -6,11 +6,12 @@ import { Text, View } from "react-native";
 
 interface PharmaCheckListProps {
   pharma: PharmaCheck[][];
+  onItemClick: (item: PharmaCheck) => void;
 }
 
 export class PharmaCheckList extends React.Component<PharmaCheckListProps> {
   render() {
-    const { pharma } = this.props;
+    const { pharma, onItemClick } = this.props;
 
     return (
       <>
@@ -37,9 +38,7 @@ export class PharmaCheckList extends React.Component<PharmaCheckListProps> {
                     {item.end && <Text>soir: {item.end}</Text>}
                   </View>
                 )}
-                onPress={() => {
-                  this.setState({ selectedItem: item });
-                }}
+                onPress={() => onItemClick(item)}
               ></List.Item>
             ))}
           </List.Section>

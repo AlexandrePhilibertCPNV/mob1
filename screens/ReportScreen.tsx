@@ -93,7 +93,16 @@ export default class ReportScreen extends React.Component<
           </View>
         </ScrollView>
         <ScrollView>
-          {tab === "pharmacheck" && <PharmaCheckList pharma={pharma} />}
+          {tab === "pharmacheck" && (
+            <PharmaCheckList
+              pharma={pharma}
+              onItemClick={(item: PharmaCheck) => {
+                this.setState({
+                  selectedItem: item,
+                });
+              }}
+            />
+          )}
 
           {tab === "novacheck" &&
             nova.map((item, i) => <List.Item key={i} title={item.drug} />)}
