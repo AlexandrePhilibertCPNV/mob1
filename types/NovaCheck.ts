@@ -5,4 +5,6 @@ type NovaCheck = {
   drug: string;
   drug_id: number;
   drugsheet_id: number;
+  start: number | null;
+  end: number | null;
 };
