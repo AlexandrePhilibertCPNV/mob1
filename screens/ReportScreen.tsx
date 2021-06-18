@@ -1,10 +1,8 @@
-import format from "date-fns/format";
-import { frCH } from "date-fns/locale";
 import _ from "lodash";
 import * as React from "react";
-import { ScrollView, StyleSheet, View, Text } from "react-native";
-import { Chip, List, Modal, Portal, TextInput } from "react-native-paper";
-
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Chip, List } from "react-native-paper";
+import { PharmaCheckList } from "../components/PharmaCheckList";
 import { UserContext } from "../contexts/UserContext";
 import { CompleteCheckModal } from "../modals/CompleteCheckModal";
 import { normalizeDateString } from "../utils/date";
@@ -97,32 +95,7 @@ export default class ReportScreen extends React.Component<
           </View>
         </ScrollView>
         <ScrollView>
-          {tab === "pharmacheck" &&
-            pharma.map((dateGroup: PharmaCheck[], i: number) => (
-              <List.Section
-                key={i}
-                title={format(dateGroup[0].date as Date, "'le' i MMMM", {
-                  locale: frCH,
-                })}
-              >
-                {dateGroup.map((item: PharmaCheck, i) => (
-                  <List.Item
-                    key={i}
-                    title={item.batch_number}
-                    description={item.drug}
-                    right={() => (
-                      <View>
-                        {item.start && <Text>matin: {item.start}</Text>}
-                        {item.end && <Text>soir: {item.end}</Text>}
-                      </View>
-                    )}
-                    onPress={() => {
-                      this.setState({ selectedItem: item });
-                    }}
-                  ></List.Item>
-                ))}
-              </List.Section>
-            ))}
+          {tab === "pharmacheck" && <PharmaCheckList pharma={pharma} />}
 
           {tab === "novacheck" &&
             nova.map((item, i) => <List.Item key={i} title={item.drug} />)}
