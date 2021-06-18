@@ -3,11 +3,8 @@ import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Chip, List } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
-
-import { ShiftReport } from "../types/shiftReport";
-import { DrugReport } from "../types/drugReport";
-import fetch, { withBearer } from "../utils/fetch";
 import { UserContext } from "../contexts/UserContext";
+import { getReports } from "../requests/getReports";
 
 interface ConsultationScreenState {
   reports: {
@@ -38,7 +35,7 @@ export default class ConsultationScreen extends React.Component<
   async fetchReports() {
     const { token } = this.context;
 
-    const response = await fetch("/reports", withBearer(token));
+    const response = await getReports(token);
 
     if (response.status === 200) {
       const reports = response.data;
