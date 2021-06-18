@@ -5,6 +5,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { List, Title } from "react-native-paper";
 
 import { UserContext } from "../contexts/UserContext";
+import { getShiftActions } from "../requests/getShiftActions";
 import { TabReportParamList } from "../types";
 import fetch, { withBearer } from "../utils/fetch";
 
@@ -37,10 +38,7 @@ export default class ActionsScreen extends React.Component<
     const { report } = this.props.route.params;
     const { token } = this.context;
 
-    const { data } = await fetch(
-      `/myactionsinshift/${report.id}`,
-      withBearer(token)
-    );
+    const { data } = await getShiftActions(report.id, token);
 
     this.setState({ details: data.data });
   }
