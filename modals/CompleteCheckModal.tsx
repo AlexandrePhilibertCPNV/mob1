@@ -3,6 +3,7 @@ import { Text } from "react-native";
 import { Modal, Portal, TextInput, Button } from "react-native-paper";
 import { UserContext } from "../contexts/UserContext";
 import { createNovaCheck } from "../requests/createNovaCheck";
+import { createPharmaCheck } from "../requests/createPharmaCheck";
 
 interface CompleteCheckModalProps {
   type: "novacheck" | "pharmacheck";
@@ -29,13 +30,14 @@ export class CompleteCheckModal extends React.Component<
   }
 
   async createMissingCheck() {
-    const { type, item } = this.props;
+    const { type } = this.props;
+    const { item } = this.state;
     const { token } = this.context;
 
     if (type === "novacheck") {
       createNovaCheck(item as NovaCheck, token);
     } else if (type === "pharmacheck") {
-      // TODO: createPharmaCheck
+      createPharmaCheck(item as PharmaCheck, token);
     }
   }
 
