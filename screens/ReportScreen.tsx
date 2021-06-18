@@ -60,7 +60,10 @@ export default class ReportScreen extends React.Component<
         <CompleteCheckModal
           type={tab}
           item={selectedItem}
-          onDismiss={() => this.setState({ selectedItem: null })}
+          onDismiss={() => {
+            this.setState({ selectedItem: null });
+            this.fetchMissingChecks();
+          }}
         />
         <ScrollView
           horizontal={true}
