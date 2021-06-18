@@ -5,6 +5,7 @@ import { Chip, List } from "react-native-paper";
 import { PharmaCheckList } from "../components/PharmaCheckList";
 import { UserContext } from "../contexts/UserContext";
 import { CompleteCheckModal } from "../modals/CompleteCheckModal";
+import { getMissingChecks } from "../requests/getMissingChecks";
 import { normalizeDateString } from "../utils/date";
 import fetch, { withBearer } from "../utils/fetch";
 
@@ -33,10 +34,7 @@ export default class ReportScreen extends React.Component<
 
   async fetchMissingChecks() {
     const { currentBaseId: baseId, token } = this.context;
-    const { data } = await fetch<{
-      pharma: PharmaCheck[];
-      nova: NovaCheck[];
-    }>(`/missingchecks/${baseId}`, withBearer(token));
+    const { data } = await getMissingChecks(baseId, token);
 
     const pharma = data.pharma.map((item) => {
       item.date = new Date(normalizeDateString(item.date as string));

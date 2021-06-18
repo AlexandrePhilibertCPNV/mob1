@@ -1,6 +1,6 @@
 const apiUrl = "http://10.0.2.2:8000/api/";
 
-type FetchResponse<T> = {
+export type FetchResponse<T> = {
   data: T;
   status: number;
   statusText: string;
