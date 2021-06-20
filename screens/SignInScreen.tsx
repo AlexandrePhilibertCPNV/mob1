@@ -124,6 +124,13 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
         ...this.state.user,
         token,
       });
+    } else if (response?.status === 401) {
+      Toast.show(
+        "Vos données de connexion sont erronées. Veuillez réessayer.",
+        {
+          duration: Toast.durations.LONG,
+        }
+      );
     } else {
       Toast.show("Une erreure est survenue", {
         duration: Toast.durations.LONG,
