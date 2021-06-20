@@ -3,6 +3,7 @@ import * as React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Chip, List } from "react-native-paper";
 import { NetInfoWrapper } from "../components/NetInfoWrapper";
+import { NovaCheckList } from "../components/NovaCheckList";
 import { PharmaCheckList } from "../components/PharmaCheckList";
 import { UserContext } from "../contexts/UserContext";
 import { CompleteCheckModal } from "../modals/CompleteCheckModal";
@@ -103,8 +104,16 @@ export default class ReportScreen extends React.Component<
               />
             )}
 
-            {tab === "novacheck" &&
-              nova?.map((item, i) => <List.Item key={i} title={item.drug} />)}
+            {tab === "novacheck" && (
+              <NovaCheckList
+                nova={nova}
+                onItemClick={(item: NovaCheck) => {
+                  this.setState({
+                    selectedItem: item,
+                  });
+                }}
+              />
+            )}
           </ScrollView>
         </NetInfoWrapper>
       </View>
