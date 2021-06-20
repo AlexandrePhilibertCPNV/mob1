@@ -36,18 +36,19 @@ export default async <T = any>(
 
   const cleanedUrl = cleanUrl(url);
   const response = await fetch(cleanedUrl, options);
+  let data;
 
-  const contentType = response.headers.get("content-type");
-  if (contentType?.includes("application/json")) {
-    return {
-      data: await response.json(),
-      status: response.status,
-      statusText: response.statusText,
-    };
+  // This try-catch is used as some requests do not return a JSON Content-Type
+  // but contain a JSON body. This means we cannot check the existence of the
+  // header in order to parse the body as JSON.
+  try {
+    data = await response.json();
+  } catch (e) {
+    // The response body cannot be parsed as JSON
   }
 
   return {
-    data: {} as T,
+    data: data,
     status: response.status,
     statusText: response.statusText,
   };
