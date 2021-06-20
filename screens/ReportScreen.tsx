@@ -8,11 +8,10 @@ import { UserContext } from "../contexts/UserContext";
 import { CompleteCheckModal } from "../modals/CompleteCheckModal";
 import { getMissingChecks } from "../requests/getMissingChecks";
 import { normalizeDateString } from "../utils/date";
-import fetch, { withBearer } from "../utils/fetch";
 
 interface ReportScreenState {
-  pharma: PharmaCheck[][];
-  nova: NovaCheck[];
+  pharma?: PharmaCheck[][];
+  nova?: NovaCheck[];
   tab: "pharmacheck" | "novacheck";
   selectedItem: any;
 }
@@ -21,8 +20,6 @@ export default class ReportScreen extends React.Component<
   ReportScreenState
 > {
   state: ReportScreenState = {
-    pharma: [],
-    nova: [],
     tab: "pharmacheck",
     selectedItem: null,
   };
@@ -107,7 +104,7 @@ export default class ReportScreen extends React.Component<
             )}
 
             {tab === "novacheck" &&
-              nova.map((item, i) => <List.Item key={i} title={item.drug} />)}
+              nova?.map((item, i) => <List.Item key={i} title={item.drug} />)}
           </ScrollView>
         </NetInfoWrapper>
       </View>
