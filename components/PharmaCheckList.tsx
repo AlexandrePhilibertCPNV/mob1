@@ -23,7 +23,7 @@ export class PharmaCheckList extends React.Component<PharmaCheckListProps> {
         {pharma?.map((dateGroup: PharmaCheck[], i: number) => (
           <List.Section
             key={i}
-            title={format(dateGroup[0].date as Date, "'le' i MMMM", {
+            title={format(dateGroup[0].date as Date, "'le' d MMMM", {
               locale: frCH,
             })}
           >
