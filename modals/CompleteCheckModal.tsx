@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Modal, Portal, TextInput, Button } from "react-native-paper";
 import Toast from "react-native-root-toast";
 import { UserContext } from "../contexts/UserContext";
@@ -90,8 +90,9 @@ export class CompleteCheckModal extends React.Component<
           contentContainerStyle={{ backgroundColor: "white", padding: 20 }}
           onDismiss={onDismiss}
         >
-          <Text>{item?.drug}</Text>
+          <Text style={styles.title}>{item?.drug}</Text>
           <TextInput
+            style={styles.textInput}
             label="Matin"
             keyboardType="numeric"
             value={item?.start?.toString()}
@@ -105,6 +106,7 @@ export class CompleteCheckModal extends React.Component<
             }}
           />
           <TextInput
+            style={styles.textInput}
             keyboardType="numeric"
             underlineColor="#065e92"
             label="Soir"
@@ -118,11 +120,30 @@ export class CompleteCheckModal extends React.Component<
               });
             }}
           />
-          <Button mode="contained" color="#065e92" onPress={this.submit}>
-            Enregistrer
-          </Button>
+          <View style={styles.actions}>
+            <Button mode="contained" color="#dbd8d8" onPress={onDismiss}>
+              Annuler
+            </Button>
+            <Button mode="contained" color="#065e92" onPress={this.submit}>
+              Enregistrer
+            </Button>
+          </View>
         </Modal>
       </Portal>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 18,
+  },
+  textInput: {
+    marginVertical: 6,
+  },
+  actions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 12,
+  },
+});
