@@ -5,6 +5,7 @@ import { Chip, List } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { UserContext } from "../contexts/UserContext";
 import { getReports } from "../requests/getReports";
+import { NetInfoWrapper } from "../components/NetInfoWrapper";
 
 interface ConsultationScreenState {
   reports: {
@@ -49,63 +50,65 @@ export default class ConsultationScreen extends React.Component<
 
     return (
       <View style={styles.container}>
-        <ScrollView
-          horizontal={true}
-          contentContainerStyle={{ padding: 12 }}
-          style={{ flexGrow: 0 }}
-          snapToStart={true}
-        >
-          <View>
-            <Chip
-              style={styles.chip}
-              textStyle={{ padding: 4 }}
-              selected={tab === "shift"}
-              onPress={() => {
-                this.setState({ tab: "shift" });
-              }}
-            >
-              Garde
-            </Chip>
-          </View>
-          <View>
-            <Chip
-              style={styles.chip}
-              textStyle={{ padding: 4 }}
-              selected={tab === "drug"}
-              onPress={() => {
-                this.setState({ tab: "drug" });
-              }}
-            >
-              Stupéfiants
-            </Chip>
-          </View>
-        </ScrollView>
-        <ScrollView
-          style={styles.contentScrollView}
-          contentContainerStyle={{
-            flex: 2,
-          }}
-        >
-          {tab === "shift" &&
-            reports.shift.map((report: ShiftReport) => (
-              <List.Item
-                key={report.id}
-                title={`Le ${report.date} à ${report.base}`}
+        <NetInfoWrapper>
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={{ padding: 12 }}
+            style={{ flexGrow: 0 }}
+            snapToStart={true}
+          >
+            <View>
+              <Chip
+                style={styles.chip}
+                textStyle={{ padding: 4 }}
+                selected={tab === "shift"}
                 onPress={() => {
-                  navigation.navigate("Actions", {
-                    report,
-                  });
+                  this.setState({ tab: "shift" });
                 }}
-              />
-            ))}
-          {tab === "drug" &&
-            reports.drug.map((report: DrugReport) => (
-              <List.Item
-                key={report.id}
-                title={`Semaine ${report.week} à ${report.base}`}
-              />
-            ))}
-        </ScrollView>
+              >
+                Garde
+              </Chip>
+            </View>
+            <View>
+              <Chip
+                style={styles.chip}
+                textStyle={{ padding: 4 }}
+                selected={tab === "drug"}
+                onPress={() => {
+                  this.setState({ tab: "drug" });
+                }}
+              >
+                Stupéfiants
+              </Chip>
+            </View>
+          </ScrollView>
+          <ScrollView
+            style={styles.contentScrollView}
+            contentContainerStyle={{
+              flex: 2,
+            }}
+          >
+            {tab === "shift" &&
+              reports.shift.map((report: ShiftReport) => (
+                <List.Item
+                  key={report.id}
+                  title={`Le ${report.date} à ${report.base}`}
+                  onPress={() => {
+                    navigation.navigate("Actions", {
+                      report,
+                    });
+                  }}
+                />
+              ))}
+            {tab === "drug" &&
+              reports.drug.map((report: DrugReport) => (
+                <List.Item
+                  key={report.id}
+                  title={`Semaine ${report.week} à ${report.base}`}
+                />
+              ))}
+          </ScrollView>
+        </NetInfoWrapper>
       </View>
     );
   }
