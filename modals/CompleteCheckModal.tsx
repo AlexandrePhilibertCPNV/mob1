@@ -1,6 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { Modal, Portal, TextInput, Button } from "react-native-paper";
+import Toast from "react-native-root-toast";
 import { UserContext } from "../contexts/UserContext";
 import { createNovaCheck } from "../requests/createNovaCheck";
 import { createPharmaCheck } from "../requests/createPharmaCheck";
@@ -21,6 +22,12 @@ export class CompleteCheckModal extends React.Component<
 > {
   static contextType = UserContext;
 
+  constructor(props: any) {
+    super(props);
+
+    this.submit = this.submit.bind(this);
+  }
+
   componentDidMount() {
     const { item } = this.props;
 
@@ -38,6 +45,37 @@ export class CompleteCheckModal extends React.Component<
       createNovaCheck(item as NovaCheck, token);
     } else if (type === "pharmacheck") {
       createPharmaCheck(item as PharmaCheck, token);
+    }
+  }
+
+  validateInputs() {
+    const { item } = this.state;
+
+    if (!/^[0-9]+$/.test(`${item?.start}`)) {
+      Toast.show("La quantité du matin n'est pas valide", {
+        duration: Toast.durations.LONG,
+      });
+
+      return false;
+    }
+
+    if (!/^[0-9]+$/.test(`${item?.end}`)) {
+      Toast.show("La quantité du soir n'est pas valide", {
+        duration: Toast.durations.LONG,
+      });
+
+      return false;
+    }
+
+    return true;
+  }
+
+  async submit() {
+    const { onDismiss } = this.props;
+
+    if (this.validateInputs()) {
+      await this.createMissingCheck();
+      onDismiss();
     }
   }
 
@@ -80,14 +118,7 @@ export class CompleteCheckModal extends React.Component<
               });
             }}
           />
-          <Button
-            mode="contained"
-            color="#065e92"
-            onPress={async () => {
-              await this.createMissingCheck();
-              onDismiss();
-            }}
-          >
+          <Button mode="contained" color="#065e92" onPress={this.submit}>
             Enregistrer
           </Button>
         </Modal>
