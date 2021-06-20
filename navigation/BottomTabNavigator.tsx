@@ -17,6 +17,25 @@ import { UserContext } from "../contexts/UserContext";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
+class HeaderRight extends React.Component {
+  static contextType = UserContext;
+
+  render() {
+    const { initials } = this.context;
+
+    return (
+      <TouchableOpacity
+        style={{ padding: 8 }}
+        onPress={() => {
+          this.context.clear();
+        }}
+      >
+        <Text>Déconnexion - {initials}</Text>
+      </TouchableOpacity>
+    );
+  }
+}
+
 export default class BottomTabNavigator extends React.Component {
   render() {
     return (
@@ -72,16 +91,7 @@ class TabConsultationNavigator extends React.Component {
           component={ConsultationScreen}
           options={{
             headerTitle: "Consultation",
-            headerRight: () => (
-              <TouchableOpacity
-                style={{ padding: 8 }}
-                onPress={() => {
-                  this.context.clear();
-                }}
-              >
-                <Text>Déconnexion - {initials}</Text>
-              </TouchableOpacity>
-            ),
+            headerRight: () => <HeaderRight />,
           }}
         />
         <TabConsultationStack.Screen name="Actions" component={ActionsScreen} />
@@ -101,6 +111,7 @@ class ReportNavigator extends React.Component {
           component={ReportScreen}
           options={{
             headerTitle: "Rapporter",
+            headerRight: () => <HeaderRight />,
           }}
         />
       </ReportStack.Navigator>
