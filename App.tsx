@@ -21,12 +21,14 @@ export default class App extends React.Component {
     const token = await SecureStore.getItemAsync("token");
     const initials = await AsyncStorage.getItem("initials");
     const currentBaseId = await AsyncStorage.getItem("currentBaseId");
+    const currentBaseName = await AsyncStorage.getItem("currentBaseName");
 
     this.setState({
       user: {
         initials,
         token,
         currentBaseId: Number(currentBaseId),
+        currentBaseName: currentBaseName,
       },
       isLoading: false,
     });

@@ -17,11 +17,12 @@ interface SignInScreenState {
     initials: string;
     password: string;
     currentBaseId: number;
+    currentBaseName?: string;
   };
 }
 
 export class SignInScreen extends React.Component<{}, SignInScreenState> {
-  state = {
+  state: SignInScreenState = {
     bases: [],
     user: {
       initials: "",
@@ -86,10 +87,15 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
   }
 
   setCurrentBase(currentBaseId: number) {
+    const { bases } = this.state;
+
     this.setState({
       user: {
         ...this.state.user,
         currentBaseId,
+        currentBaseName: (
+          bases.find((base: Base) => base.id === currentBaseId)! as Base
+        ).name,
       },
     });
   }
@@ -107,7 +113,8 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
   }
 
   async handleSignIn() {
-    const { initials, password, currentBaseId } = this.state.user;
+    const { initials, password, currentBaseId, currentBaseName } =
+      this.state.user;
 
     const response = await this.doHandleSignIn(initials, password);
 
@@ -118,6 +125,7 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
         SecureStore.setItemAsync("token", token),
         AsyncStorage.setItem("initials", initials),
         AsyncStorage.setItem("currentBaseId", currentBaseId.toString()),
+        AsyncStorage.setItem("currentBaseName", currentBaseName!),
       ]);
 
       this.context.setUser({
@@ -154,7 +162,6 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
             autoCorrect={false}
             autoFocus={true}
             onChangeText={this.setInitials}
-            maxLength={3}
             defaultValue={this.context?.initials}
           />
           <TextInput

@@ -21,7 +21,7 @@ class HeaderRight extends React.Component {
   static contextType = UserContext;
 
   render() {
-    const { initials } = this.context;
+    const { initials, currentBaseName } = this.context;
 
     return (
       <TouchableOpacity
@@ -30,7 +30,9 @@ class HeaderRight extends React.Component {
           this.context.clear();
         }}
       >
-        <Text>Déconnexion - {initials}</Text>
+        <Text>
+          Déconnexion - {currentBaseName} - {initials}
+        </Text>
       </TouchableOpacity>
     );
   }
