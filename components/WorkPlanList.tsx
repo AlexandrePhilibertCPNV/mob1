@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { frCH } from "date-fns/locale";
 import React from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { List } from "react-native-paper";
 
 /**
@@ -47,7 +47,12 @@ export class WorkPlanList extends React.Component<WorkPlanListProps> {
                 locale: frCH,
               }
             )}`}
-            description={`status: ${getWorkplanStatusText(item)}`}
+            description={
+              <View>
+                <Text>status: {getWorkplanStatusText(item)}</Text>
+                {item.reason && <Text>raison: {item.reason}</Text>}
+              </View>
+            }
             onPress={() => onItemClick(item)}
           ></List.Item>
         ))}
