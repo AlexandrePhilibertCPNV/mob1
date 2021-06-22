@@ -115,9 +115,9 @@ export class UpdateWorkPlanModal extends React.Component<
               this.setState({
                 item: {
                   ...item,
+                  reason: null,
                   confirmation,
                 },
-                reason: null,
               });
             }}
             selectedValue={item.confirmation}
@@ -128,7 +128,18 @@ export class UpdateWorkPlanModal extends React.Component<
             <Picker.Item key={1} label="Confirmé" value={1} />
           </Picker>
           {item.confirmation == 0 && (
-            <TextInput label="raison" multiline={true} />
+            <TextInput
+              label="raison"
+              multiline={true}
+              onChangeText={(reason) => {
+                this.setState({
+                  item: {
+                    ...item,
+                    reason,
+                  },
+                });
+              }}
+            />
           )}
           <View style={styles.actions}>
             <Button mode="contained" color="#dbd8d8" onPress={onDismiss}>
