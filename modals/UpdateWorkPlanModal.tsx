@@ -4,7 +4,9 @@ import { frCH } from "date-fns/locale";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Modal, Portal, Button, TextInput } from "react-native-paper";
+import Toast from "react-native-root-toast";
 import { UserContext } from "../contexts/UserContext";
+import { confirmWorkPlan } from "../requests/confirmWorkPlan";
 
 interface UpdateWorkPlanProps {
   item: WorkPlan | null;
@@ -29,6 +31,12 @@ export class UpdateWorkPlanModal extends React.Component<
     reason: null,
   };
 
+  constructor(props: any) {
+    super(props);
+
+    this.submit = this.submit.bind(this);
+  }
+
   componentDidMount() {
     const { item } = this.props;
 
@@ -36,6 +44,13 @@ export class UpdateWorkPlanModal extends React.Component<
       item,
       confirmed: item?.confirmation ?? null,
     });
+  }
+
+  async submit() {
+    const { item } = this.state;
+    const { token } = this.context;
+
+    const response = await confirmWorkPlan(item!, token);
   }
 
   render() {
@@ -79,7 +94,7 @@ export class UpdateWorkPlanModal extends React.Component<
             <Button mode="contained" color="#dbd8d8" onPress={onDismiss}>
               Annuler
             </Button>
-            <Button mode="contained" color="#065e92">
+            <Button mode="contained" color="#065e92" onPress={this.submit}>
               Enregistrer
             </Button>
           </View>
