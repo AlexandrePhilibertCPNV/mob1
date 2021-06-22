@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
 import {
   BottomTabParamList,
@@ -74,7 +74,22 @@ export default class BottomTabNavigator extends React.Component {
             options={{
               title: "Horaires à confirmer",
               tabBarIcon: ({ color }) => (
-                <TabBarIcon name="time-outline" color={color} />
+                <View>
+                  <TabBarIcon name="time-outline" color={color} />
+                  <Text
+                    style={{
+                      position: "absolute",
+                      right: -15,
+                      color: "#fff",
+                      backgroundColor: "#065e92",
+                      borderRadius: 40,
+                      paddingHorizontal: 4,
+                      paddingVertical: 2,
+                    }}
+                  >
+                    {this.context.workPlans?.length ?? 0}
+                  </Text>
+                </View>
               ),
             }}
           />
