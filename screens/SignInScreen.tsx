@@ -151,10 +151,13 @@ export class SignInScreen extends React.Component<{}, SignInScreenState> {
 
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.logo}
-          source={require("../assets/images/logo.png")}
-        />
+        <View>
+          <Text style={styles.version}>Version: eval APT</Text>
+          <Image
+            style={styles.logo}
+            source={require("../assets/images/logo.png")}
+          />
+        </View>
         <View style={styles.form}>
           <TextInput
             style={styles.textinput}
@@ -211,6 +214,11 @@ const styles = StyleSheet.create({
     height: 125,
     resizeMode: "contain",
     marginVertical: 12,
+  },
+  version: {
+    fontSize: 10,
+    textAlign: "center",
+    marginTop: 10,
   },
   form: {
     width: "100%",
