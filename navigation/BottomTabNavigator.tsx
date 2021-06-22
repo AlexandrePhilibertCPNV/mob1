@@ -67,6 +67,14 @@ export default class BottomTabNavigator extends React.Component {
             ),
           }}
         />
+        {/**
+         * FIXME: Memory leak caused by conditionnal render of Screen in Navigator
+         *
+         * The Screen should not be conditionnaly rendered as this causes the
+         * app to leak memory when the Screen is not rendered but the user is on
+         * this screen. The best way to fix this should be to just disable the
+         * button instead of hiding it
+         */}
         {this.context.workPlans?.length > 0 && (
           <BottomTab.Screen
             name="TabWorkPlan"
