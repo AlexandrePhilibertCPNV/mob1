@@ -12,6 +12,7 @@ import { SplashScreen } from "./screens/SplashScreen";
 import { UserContext } from "./contexts/UserContext";
 import fetch, { withBearer } from "./utils/fetch";
 import { WorkPlanContext } from "./contexts/WorkPlanContext";
+import { getUnconfirmedWorkPlans } from "./requests/getUnconfirmedWorkPlans";
 
 export default class App extends React.Component {
   state: any = {
@@ -36,15 +37,13 @@ export default class App extends React.Component {
       isLoading: false,
     });
 
-    this.getUnconfirmedWorkPlans();
+    this.doGetUnconfirmedWorkPlans();
   }
 
-  async getUnconfirmedWorkPlans() {
+  async doGetUnconfirmedWorkPlans() {
     const { token }: any = this.state.user;
 
-    const response = await fetch("/unconfirmedworkplans", {
-      ...withBearer(token),
-    });
+    const response = await getUnconfirmedWorkPlans(token);
 
     this.setState({
       workPlans: response.data,
