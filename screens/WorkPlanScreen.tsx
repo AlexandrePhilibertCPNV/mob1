@@ -26,12 +26,14 @@ export default class WorkPlanScreen extends React.Component<
     return (
       <View style={styles.container}>
         <NetInfoWrapper>
-          <UpdateWorkPlanModal
-            item={selectedItem}
-            onDismiss={() => {
-              this.setState({ selectedItem: null });
-            }}
-          />
+          {selectedItem && (
+            <UpdateWorkPlanModal
+              item={selectedItem}
+              onDismiss={() => {
+                this.setState({ selectedItem: null });
+              }}
+            />
+          )}
           <ScrollView>
             <WorkPlanList
               workPlans={workPlans}

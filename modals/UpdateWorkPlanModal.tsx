@@ -1,3 +1,4 @@
+import { Picker } from "@react-native-picker/picker";
 import { format } from "date-fns";
 import { frCH } from "date-fns/locale";
 import React from "react";
@@ -12,6 +13,7 @@ interface UpdateWorkPlanProps {
 
 interface UpdateWorkPlanModalState {
   item: WorkPlan | null;
+  confirmed: 0 | 1 | null;
 }
 
 export class UpdateWorkPlanModal extends React.Component<
@@ -20,16 +22,23 @@ export class UpdateWorkPlanModal extends React.Component<
 > {
   static contextType = UserContext;
 
+  state: UpdateWorkPlanModalState = {
+    item: null,
+    confirmed: null,
+  };
+
   componentDidMount() {
     const { item } = this.props;
 
     this.setState({
       item,
+      confirmed: item?.confirmation ?? null,
     });
   }
 
   render() {
     const { item, onDismiss } = this.props;
+    const { confirmed } = this.state;
 
     if (!item) {
       return <></>;
@@ -44,11 +53,24 @@ export class UpdateWorkPlanModal extends React.Component<
           onDismiss={onDismiss}
         >
           <Text style={styles.title}>
-            {item?.worktime.type}
+            {item?.worktime.type}{" "}
             {format(new Date(item?.date as string), "'le' d MMMM", {
               locale: frCH,
             })}
           </Text>
+          <Picker
+            onValueChange={(confirmed: any) => {
+              this.setState({
+                confirmed,
+              });
+            }}
+            selectedValue={confirmed}
+            mode="dialog"
+          >
+            <Picker.Item key={null} label="Inconnu" value={null} />
+            <Picker.Item key={0} label="A discuter" value={0} />
+            <Picker.Item key={1} label="Confirmé" value={1} />
+          </Picker>
           <View style={styles.actions}>
             <Button mode="contained" color="#dbd8d8" onPress={onDismiss}>
               Annuler
