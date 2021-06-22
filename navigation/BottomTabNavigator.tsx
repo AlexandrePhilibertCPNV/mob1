@@ -16,6 +16,7 @@ import ReportScreen from "../screens/ReportScreen";
 import ActionsScreen from "../screens/ActionsScreen";
 import { UserContext } from "../contexts/UserContext";
 import WorkPlanScreen from "../screens/WorkPlanScreen";
+import { WorkPlanContext } from "../contexts/WorkPlanContext";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -41,6 +42,8 @@ class HeaderRight extends React.Component {
 }
 
 export default class BottomTabNavigator extends React.Component {
+  static contextType = WorkPlanContext;
+
   render() {
     return (
       <BottomTab.Navigator initialRouteName="TabConsultation">
@@ -64,16 +67,18 @@ export default class BottomTabNavigator extends React.Component {
             ),
           }}
         />
-        <BottomTab.Screen
-          name="TabWorkPlan"
-          component={WorkPlanNavigator}
-          options={{
-            title: "Horaires à confirmer",
-            tabBarIcon: ({ color }) => (
-              <TabBarIcon name="time-outline" color={color} />
-            ),
-          }}
-        />
+        {this.context.workPlans?.length > 0 && (
+          <BottomTab.Screen
+            name="TabWorkPlan"
+            component={WorkPlanNavigator}
+            options={{
+              title: "Horaires à confirmer",
+              tabBarIcon: ({ color }) => (
+                <TabBarIcon name="time-outline" color={color} />
+              ),
+            }}
+          />
+        )}
       </BottomTab.Navigator>
     );
   }

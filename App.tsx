@@ -10,10 +10,13 @@ import Colors from "./constants/Colors";
 import Navigation from "./navigation";
 import { SplashScreen } from "./screens/SplashScreen";
 import { UserContext } from "./contexts/UserContext";
+import fetch, { withBearer } from "./utils/fetch";
+import { WorkPlanContext } from "./contexts/WorkPlanContext";
 
 export default class App extends React.Component {
-  state = {
+  state: any = {
     user: {},
+    workPlans: [],
     isLoading: true,
   };
 
@@ -32,10 +35,24 @@ export default class App extends React.Component {
       },
       isLoading: false,
     });
+
+    this.getUnconfirmedWorkPlans();
+  }
+
+  async getUnconfirmedWorkPlans() {
+    const { token }: any = this.state.user;
+
+    const response = await fetch("/unconfirmedworkplans", {
+      ...withBearer(token),
+    });
+
+    this.setState({
+      workPlans: response.data,
+    });
   }
 
   render() {
-    const { user, isLoading } = this.state;
+    const { user, workPlans, isLoading } = this.state;
 
     if (isLoading) {
       return <SplashScreen />;
@@ -54,16 +71,27 @@ export default class App extends React.Component {
           },
         }}
       >
-        <SafeAreaProvider>
-          <Provider>
-            <Portal.Host>
-              <RootSiblingParent>
-                <Navigation />
-                <StatusBar backgroundColor={Colors.light.primary} />
-              </RootSiblingParent>
-            </Portal.Host>
-          </Provider>
-        </SafeAreaProvider>
+        <WorkPlanContext.Provider
+          value={{
+            workPlans,
+            setWorkPlans: (workPlans) => {
+              this.setState({
+                workPlans,
+              });
+            },
+          }}
+        >
+          <SafeAreaProvider>
+            <Provider>
+              <Portal.Host>
+                <RootSiblingParent>
+                  <Navigation />
+                  <StatusBar backgroundColor={Colors.light.primary} />
+                </RootSiblingParent>
+              </Portal.Host>
+            </Provider>
+          </SafeAreaProvider>
+        </WorkPlanContext.Provider>
       </UserContext.Provider>
     );
   }
