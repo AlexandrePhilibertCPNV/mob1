@@ -6,7 +6,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { Modal, Portal, Button, TextInput } from "react-native-paper";
 import Toast from "react-native-root-toast";
 import { UserContext } from "../contexts/UserContext";
+import { WorkPlanContext } from "../contexts/WorkPlanContext";
 import { confirmWorkPlan } from "../requests/confirmWorkPlan";
+import { getUnconfirmedWorkPlans } from "../requests/getUnconfirmedWorkPlans";
 
 interface UpdateWorkPlanProps {
   item: WorkPlan | null;
@@ -22,7 +24,7 @@ export class UpdateWorkPlanModal extends React.Component<
   UpdateWorkPlanProps,
   UpdateWorkPlanModalState
 > {
-  static contextType = UserContext;
+  static contextType = WorkPlanContext;
 
   state: UpdateWorkPlanModalState = {
     item: null,
@@ -79,12 +81,23 @@ export class UpdateWorkPlanModal extends React.Component<
     return true;
   }
 
-  async submit() {
+  async submit(token: string) {
+    const { onDismiss } = this.props;
     const { item } = this.state;
-    const { token } = this.context;
 
     if (this.validate()) {
       const response = await confirmWorkPlan(item!, token);
+
+      if (response.status === 200) {
+        const { data: workPlans } = await getUnconfirmedWorkPlans(token);
+        this.context.setWorkPlans(workPlans);
+
+        onDismiss();
+      } else {
+        Toast.show("Une erreur est survenue. Veuillez réessayer.", {
+          duration: Toast.durations.LONG,
+        });
+      }
     }
   }
 
@@ -145,14 +158,18 @@ export class UpdateWorkPlanModal extends React.Component<
             <Button mode="contained" color="#dbd8d8" onPress={onDismiss}>
               Annuler
             </Button>
-            <Button
-              mode="contained"
-              color="#065e92"
-              onPress={this.submit}
-              disabled={item.confirmation == null}
-            >
-              Enregistrer
-            </Button>
+            <UserContext.Consumer>
+              {({ token }) => (
+                <Button
+                  mode="contained"
+                  color="#065e92"
+                  onPress={() => this.submit(token)}
+                  disabled={item.confirmation == null}
+                >
+                  Enregistrer
+                </Button>
+              )}
+            </UserContext.Consumer>
           </View>
         </Modal>
       </Portal>
