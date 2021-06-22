@@ -15,7 +15,6 @@ interface UpdateWorkPlanProps {
 
 interface UpdateWorkPlanModalState {
   item: WorkPlan | null;
-  confirmed: 0 | 1 | null;
   reason: string | null;
 }
 
@@ -27,7 +26,6 @@ export class UpdateWorkPlanModal extends React.Component<
 
   state: UpdateWorkPlanModalState = {
     item: null,
-    confirmed: null,
     reason: null,
   };
 
@@ -42,20 +40,57 @@ export class UpdateWorkPlanModal extends React.Component<
 
     this.setState({
       item,
-      confirmed: item?.confirmation ?? null,
     });
+  }
+
+  validate() {
+    const { item } = this.state;
+
+    // When the confirmation is 0 (to discuss), a reason must be given
+    if (item?.confirmation == 0) {
+      if (!item?.reason) {
+        Toast.show("Une raison doit être donnée", {
+          duration: Toast.durations.LONG,
+        });
+
+        return false;
+      }
+
+      if (item.reason.length < 10) {
+        Toast.show(
+          "La raison doit être suppérieure ou égale à 10 charactères",
+          {
+            duration: Toast.durations.LONG,
+          }
+        );
+
+        return false;
+      }
+
+      if (item.reason.length > 50) {
+        Toast.show("La raison doit être inférieure ou égale à 50 charactères", {
+          duration: Toast.durations.LONG,
+        });
+
+        return false;
+      }
+    }
+
+    return true;
   }
 
   async submit() {
     const { item } = this.state;
     const { token } = this.context;
 
-    const response = await confirmWorkPlan(item!, token);
+    if (this.validate()) {
+      const response = await confirmWorkPlan(item!, token);
+    }
   }
 
   render() {
-    const { item, onDismiss } = this.props;
-    const { confirmed } = this.state;
+    const { onDismiss } = this.props;
+    const { item } = this.state;
 
     if (!item) {
       return <></>;
@@ -70,31 +105,41 @@ export class UpdateWorkPlanModal extends React.Component<
           onDismiss={onDismiss}
         >
           <Text style={styles.title}>
-            {item?.worktime.type}{" "}
+            {item.worktime.type}{" "}
             {format(new Date(item?.date as string), "'le' d MMMM", {
               locale: frCH,
             })}
           </Text>
           <Picker
-            onValueChange={(confirmed: any) => {
+            onValueChange={(confirmation: any) => {
               this.setState({
-                confirmed,
+                item: {
+                  ...item,
+                  confirmation,
+                },
                 reason: null,
               });
             }}
-            selectedValue={confirmed}
+            selectedValue={item.confirmation}
             mode="dialog"
           >
             <Picker.Item key={null} label="Inconnu" value={null} />
             <Picker.Item key={0} label="A discuter" value={0} />
             <Picker.Item key={1} label="Confirmé" value={1} />
           </Picker>
-          {confirmed == 0 && <TextInput label="raison" multiline={true} />}
+          {item.confirmation == 0 && (
+            <TextInput label="raison" multiline={true} />
+          )}
           <View style={styles.actions}>
             <Button mode="contained" color="#dbd8d8" onPress={onDismiss}>
               Annuler
             </Button>
-            <Button mode="contained" color="#065e92" onPress={this.submit}>
+            <Button
+              mode="contained"
+              color="#065e92"
+              onPress={this.submit}
+              disabled={item.confirmation == null}
+            >
               Enregistrer
             </Button>
           </View>
