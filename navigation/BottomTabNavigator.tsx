@@ -9,11 +9,13 @@ import {
   BottomTabParamList,
   TabConsultationParamList,
   TabReportParamList,
+  TabWorkPlanParamList,
 } from "../types";
 import ConsultationScreen from "../screens/ConsultationScreen";
 import ReportScreen from "../screens/ReportScreen";
 import ActionsScreen from "../screens/ActionsScreen";
 import { UserContext } from "../contexts/UserContext";
+import WorkPlanScreen from "../screens/WorkPlanScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -59,6 +61,16 @@ export default class BottomTabNavigator extends React.Component {
             title: "Rapporter",
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="ios-code" color={color} />
+            ),
+          }}
+        />
+        <BottomTab.Screen
+          name="TabWorkPlan"
+          component={WorkPlanNavigator}
+          options={{
+            title: "Horaires à confirmer",
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="time-outline" color={color} />
             ),
           }}
         />
@@ -117,6 +129,24 @@ class ReportNavigator extends React.Component {
           }}
         />
       </ReportStack.Navigator>
+    );
+  }
+}
+
+const WorkPlanStack = createStackNavigator<TabWorkPlanParamList>();
+class WorkPlanNavigator extends React.Component {
+  render() {
+    return (
+      <WorkPlanStack.Navigator>
+        <WorkPlanStack.Screen
+          name="WorkPlanScreen"
+          component={WorkPlanScreen}
+          options={{
+            headerTitle: "Horaires",
+            headerRight: () => <HeaderRight />,
+          }}
+        />
+      </WorkPlanStack.Navigator>
     );
   }
 }

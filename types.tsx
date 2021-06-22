@@ -8,6 +8,7 @@ import { ShiftReport } from "./types/shiftReport";
 export type BottomTabParamList = {
   TabConsultation: undefined;
   TabReport: undefined;
+  TabWorkPlan: undefined;
 };
 
 export type TabConsultationParamList = {
@@ -19,4 +20,8 @@ export type TabReportParamList = {
   ReportScreen: {
     report: ShiftReport;
   };
+};
+
+export type TabWorkPlanParamList = {
+  WorkPlanScreen: undefined;
 };

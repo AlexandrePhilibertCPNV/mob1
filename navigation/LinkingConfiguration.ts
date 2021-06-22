@@ -22,6 +22,11 @@ export default {
               ReportScreen: "report",
             },
           },
+          TabWorkPlan: {
+            screens: {
+              WorkPlanScreen: "workplan",
+            },
+          },
         },
       },
     },
